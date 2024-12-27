@@ -5,20 +5,22 @@ require('dotenv').config();
 
 const app = express();
 
+// Import routes
+const authRouter = require('./src/routes/auth');
+const profileRouter = require('./src/routes/profile');
+const mentorshipRouter = require('./src/routes/mentorship');
+
 // Middleware
 app.use(cors());
 app.use(express.json());
 app.use(express.static('public'));
 
-// Serve static files from public directory
-app.use(express.static(path.join(__dirname, 'public')));
+// Use routes
+app.use('/api/auth', authRouter);
+app.use('/api/profile', profileRouter);
+app.use('/api/mentorship', mentorshipRouter);
 
-// Routes (we'll create these files next)
-app.use('/api/auth', require('./src/routes/auth'));
-app.use('/api/profile', require('./src/routes/profile'));
-app.use('/api/mentorship', require('./src/routes/mentorship'));
-
-// Serve index.html for all other routes
+// Serve static files
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
